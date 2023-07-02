@@ -146,9 +146,20 @@ let displayNum = function(char) {
         display.appendChild(newNum); 
         numStack.push(newNum.textContent); 
     } else { // if there is a number that has not been terminated by an operator
-        const lastNum = display; 
-        lastNum.lastChild.textContent += char;
-        numStack[numStack.length - 1] = lastNum.lastChild.textContent;
+        if (char === '.')
+        {
+            if (!numStack[numStack.length - 1].includes('.')) // check to see if num has a decimal when the char is a decimal
+            {
+                const lastNum = display; 
+                lastNum.lastChild.textContent += char;
+                numStack[numStack.length - 1] = lastNum.lastChild.textContent;
+            }
+        } else {
+            const lastNum = display; 
+            lastNum.lastChild.textContent += char;
+            numStack[numStack.length - 1] = lastNum.lastChild.textContent;
+        }
+
     }
 
     console.log(numStack); 
@@ -199,6 +210,28 @@ clear.addEventListener('click', clearDisplay);
 const equalCalculate = document.querySelector('.equal'); 
 equalCalculate.addEventListener('click', displayCalculation); 
 
+const keyDown = window.addEventListener('keydown', (e) => {
+    const keyDiv = document.querySelector(`.num[data-key=${e.code}]`); 
+    const operatorDiv = document.querySelector(`.operator[data-key=${e.code}]`);  
+    const equalDiv = document.querySelector(`.equal[data-key=${e.code}]`); 
+    const clearDiv = document.querySelector(`.clear[data-key=${e.code}]`); 
+
+
+    if (keyDiv) 
+    {
+        displayNum(keyDiv.textContent); 
+    }
+    else if (operatorDiv)
+    {
+        displayNum(operatorDiv.textContent); 
+    } else if (equalDiv) 
+    {
+        displayCalculation(); 
+    } else if (clearDiv) 
+    {
+        clearDisplay(); 
+    }
+}) 
 
 
 
